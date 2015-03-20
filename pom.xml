@@ -61,7 +61,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>imperial.modaclouds.fg.hdb2ldb.DataTransform</mainClass>
+							<mainClass>imperial.modaclouds.fg.fg_report.ReportGenerator</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
