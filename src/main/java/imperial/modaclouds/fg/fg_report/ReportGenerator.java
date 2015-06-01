@@ -57,56 +57,54 @@ public class ReportGenerator {
 
 	public static void main(String[] args){
 
-//		String fileName = "C:\\Users\\weikun\\Desktop\\";
-//		String reportFileName = "C:\\Users\\weikun\\Desktop\\result2.pdf";
-//		long interval = 10000;
-		
-		if (args.length < 3) {
+		//		String fileName = "C:\\Users\\weikun\\Desktop\\";
+		//		String reportFileName = "C:\\Users\\weikun\\Desktop\\result2.pdf";
+		//		long interval = 10000;
+
+		if (args.length < 2) {
 			System.out.println("Please input: \n "
-					+ "1. where the report data is saved \n"
-					+ "2. where the report will be saved \n"
-					+ "3. what the time interval the generation will have.");
+					+ "1. filename \n"
+					+ "2. where the report will be saved \n");
 		}
+
+//		File file = new File(args[0]);
+//
+//		String absolutePath = file.getAbsolutePath();
+//		//File dir = new File(absolutePath.substring(0, absolutePath.lastIndexOf(File.separator)));
+//		File dir = new File(absolutePath);
+//		File[] files = null;
+//
+//		files = dir.listFiles(new FilenameFilter() {
+//			public boolean accept(File dir, String name) {
+//				return name.startsWith("reportData");
+//			}
+//		});
+//
+//		if (files.length == 0) {
+//			System.out.println("Cannot find any report data.");
+//		}
+//		else {
+//			for (int i = 0; i < files.length; i++) {
+//				String fileName = files[i].toString();
+//				String systemInfo = files[i].getName().replaceAll("reportData-", "");
+//				systemInfo = systemInfo.replaceAll(".json", "");
+//				data = parseFile(fileName); 
+//
+//				String reportFile = args[1]+"/"+systemInfo+".pdf";
+//				build(reportFile,systemInfo);
+//				System.out.println("Report file: "+reportFile+" is generated.");
+//			}
+//		}
 		
-		long interval = Long.valueOf(args[2]);
+		String fileName = args[0];
+		File file = new File(fileName);
+		String systemInfo = file.getName().replaceAll("reportData-", "");
+		systemInfo = systemInfo.replaceAll(".json", "");
+		data = parseFile(fileName); 
 
-		while (true) {
-
-			File file = new File(args[0]);
-
-			String absolutePath = file.getAbsolutePath();
-			//File dir = new File(absolutePath.substring(0, absolutePath.lastIndexOf(File.separator)));
-			File dir = new File(absolutePath);
-			File[] files = null;
-
-			files = dir.listFiles(new FilenameFilter() {
-				public boolean accept(File dir, String name) {
-					return name.startsWith("reportData");
-				}
-			});
-
-			if (files.length == 0) {
-				System.out.println("Cannot find any report data.");
-			}
-			else {
-				for (int i = 0; i < files.length; i++) {
-					String fileName = files[i].toString();
-					String systemInfo = files[i].getName().replaceAll("reportData-", "");
-					systemInfo = systemInfo.replaceAll(".json", "");
-					data = parseFile(fileName); 
-					
-					String reportFile = args[1]+"/"+systemInfo+".pdf";
-					build(reportFile,systemInfo);
-					System.out.println("Report file: "+reportFile+" is generated.");
-				}
-			}
-			
-			try {
-				Thread.sleep(interval);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+		String reportFile = args[1]+"/"+systemInfo+".pdf";
+		build(reportFile,systemInfo);
+		System.out.println("Report file: "+reportFile+" is generated.");
 	}
 
 	private static void build(String reportFileName, String systemInfo) {
@@ -131,7 +129,7 @@ public class ReportGenerator {
 		}
 
 		builder.add(cmp.subreport(buildTermTable()));
-		
+
 		mainReport.title(builder);
 		try {
 			mainReport.toPdf(Exporters.pdfExporter(reportFileName));
@@ -220,9 +218,9 @@ public class ReportGenerator {
 			timeColumn = col.column("Time", "time", type.stringType());
 			data1Column = col.column(data.getClassName().get(startIndex), "data1", type.doubleType());
 
-		    seriesColors = new HashMap<String, Color>();
-		    seriesColors.put(data.getClassName().get(startIndex), Color.BLUE);
-			
+			seriesColors = new HashMap<String, Color>();
+			seriesColors.put(data.getClassName().get(startIndex), Color.BLUE);
+
 			try {
 				report
 				.setTemplate(Templates.reportTemplate)
@@ -254,15 +252,15 @@ public class ReportGenerator {
 			for (int i = 0 ; i < valueSet.get(0).size(); i++) {
 				dataSource.add(data.getTime().get(i),valueSet.get(0).get(i),valueSet.get(1).get(i));
 			}
-			
+
 			timeColumn = col.column("Time", "time", type.stringType());
 			data1Column = col.column(data.getClassName().get(startIndex), "data1", type.doubleType());
 			data2Column = col.column(data.getClassName().get(startIndex+1), "data2", type.doubleType());
 
-		    seriesColors = new HashMap<String, Color>();
-		    seriesColors.put(data.getClassName().get(startIndex), Color.BLUE);
-		    seriesColors.put(data.getClassName().get(startIndex+1), Color.RED);
-			
+			seriesColors = new HashMap<String, Color>();
+			seriesColors.put(data.getClassName().get(startIndex), Color.BLUE);
+			seriesColors.put(data.getClassName().get(startIndex+1), Color.RED);
+
 			try {
 				report
 				.setTemplate(Templates.reportTemplate)
@@ -300,11 +298,11 @@ public class ReportGenerator {
 			data2Column = col.column(data.getClassName().get(startIndex+1), "data2", type.doubleType());
 			data3Column = col.column(data.getClassName().get(startIndex+2), "data3", type.doubleType());
 
-		    seriesColors = new HashMap<String, Color>();
-		    seriesColors.put(data.getClassName().get(startIndex), Color.BLUE);
-		    seriesColors.put(data.getClassName().get(startIndex+1), Color.RED);
-		    seriesColors.put(data.getClassName().get(startIndex+2), Color.GREEN);
-			
+			seriesColors = new HashMap<String, Color>();
+			seriesColors.put(data.getClassName().get(startIndex), Color.BLUE);
+			seriesColors.put(data.getClassName().get(startIndex+1), Color.RED);
+			seriesColors.put(data.getClassName().get(startIndex+2), Color.GREEN);
+
 			try {
 				report
 				.setTemplate(Templates.reportTemplate)
@@ -343,13 +341,13 @@ public class ReportGenerator {
 			data3Column = col.column(data.getClassName().get(startIndex+2), "data3", type.doubleType());
 			data4Column = col.column(data.getClassName().get(startIndex+3), "data4", type.doubleType());
 
-		    seriesColors = new HashMap<String, Color>();
-		    seriesColors.put(data.getClassName().get(startIndex), Color.BLUE);
-		    seriesColors.put(data.getClassName().get(startIndex+1), Color.RED);
-		    seriesColors.put(data.getClassName().get(startIndex+2), Color.GREEN);
-		    seriesColors.put(data.getClassName().get(startIndex+3), Color.GRAY);
+			seriesColors = new HashMap<String, Color>();
+			seriesColors.put(data.getClassName().get(startIndex), Color.BLUE);
+			seriesColors.put(data.getClassName().get(startIndex+1), Color.RED);
+			seriesColors.put(data.getClassName().get(startIndex+2), Color.GREEN);
+			seriesColors.put(data.getClassName().get(startIndex+3), Color.GRAY);
 
-			
+
 			try {
 				report
 				.setTemplate(Templates.reportTemplate)
@@ -390,13 +388,13 @@ public class ReportGenerator {
 			data4Column = col.column(data.getClassName().get(startIndex+3), "data4", type.doubleType());
 			data5Column = col.column(data.getClassName().get(startIndex+4), "data5", type.doubleType());
 
-		    seriesColors = new HashMap<String, Color>();
-		    seriesColors.put(data.getClassName().get(startIndex), Color.BLUE);
-		    seriesColors.put(data.getClassName().get(startIndex+1), Color.RED);
-		    seriesColors.put(data.getClassName().get(startIndex+2), Color.GREEN);
-		    seriesColors.put(data.getClassName().get(startIndex+3), Color.GRAY);
-		    seriesColors.put(data.getClassName().get(startIndex+4), Color.BLACK);
-			
+			seriesColors = new HashMap<String, Color>();
+			seriesColors.put(data.getClassName().get(startIndex), Color.BLUE);
+			seriesColors.put(data.getClassName().get(startIndex+1), Color.RED);
+			seriesColors.put(data.getClassName().get(startIndex+2), Color.GREEN);
+			seriesColors.put(data.getClassName().get(startIndex+3), Color.GRAY);
+			seriesColors.put(data.getClassName().get(startIndex+4), Color.BLACK);
+
 			try {
 				report
 				.setTemplate(Templates.reportTemplate)
@@ -539,20 +537,20 @@ public class ReportGenerator {
 
 		return report;
 	}
-	
+
 	private static JasperReportBuilder reportHeader() {
 		JasperReportBuilder report = report();
 
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:00");
-		
+
 		String startObs = data.getTime().get(0);
 		String endObs = data.getTime().get(data.getTime().size()-1);
-		
+
 		try {
 			report//create new report design
 			.setTemplate(Templates.reportTemplate)
-					.title(Templates.createTitleComponent("FG Report - "+sdf.format(date)+" Period: "+startObs+"-"+endObs));
+			.title(Templates.createTitleComponent("FG Report - "+sdf.format(date)+" Period: "+startObs+"-"+endObs));
 			//.show();//create and show report
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -588,7 +586,7 @@ public class ReportGenerator {
 
 		return report;
 	}
-	
+
 	private static ReportData parseFile(String fileName) {
 		ReportData data = new ReportData();
 
